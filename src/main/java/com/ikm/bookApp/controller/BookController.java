@@ -29,12 +29,9 @@ public class BookController {
         return ResponseEntity.ok(bookService.createBook(bookRequestdto));
     }
 
-    // @GetMapping("/{isbn}")
-    // public ResponseEntity<BookResponseDto> getBooksbyIsbn(@PathVariable String isbn){
-    //     return ResponseEntity.ok(bookService.getBooksbyIsbn(isbn));
+    @GetMapping("/{isbn}")
+    public ResponseEntity<BookResponseDto> getBooksbyIsbn(@PathVariable String isbn){
+        return ResponseEntity.ok(bookService.getBooksbyIsbn(isbn));
 
-    // }
-
-
-    
+    }  
 }

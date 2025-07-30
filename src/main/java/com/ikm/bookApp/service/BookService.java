@@ -2,10 +2,12 @@ package com.ikm.bookApp.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.ikm.bookApp.dto.BookRequestdto;
+import com.ikm.bookApp.dto.BookResponseDto;
 import com.ikm.bookApp.model.Book;
 import com.ikm.bookApp.model.Review;
 import com.ikm.bookApp.dto.Reviewdto;
@@ -37,4 +39,36 @@ public class BookService {
         book.setReviews(reviews);
         return bookRepository.save(book);
     }
+
+    public BookResponseDto getBooksbyIsbn(String isbn) {
+        Optional<Book> book = bookRepository.finByIsBn(isbn);
+        if (book.isPresent()) {
+            BookResponseDto bookresponse = mapToBookResponce(book.get());
+            return bookresponse;
+        } else {
+            return null;
+        }
+    }
+
+    public BookResponseDto mapToBookResponce(Book book){
+        BookResponseDto bookResponseDto = new BookResponseDto();
+        bookResponseDto.setIsbn(book.getIsbn());
+        bookResponseDto.setTitle(book.getTitle());
+        bookResponseDto.setAuthor(book.getAuthor());
+        bookResponseDto.setPublicationYear(book.getPublicationYear());
+        List<Review> reviews = book.getReviews();
+        List<Reviewdto> reviewdtoList = new ArrayList<>();
+        for(Review review : reviews){
+            Reviewdto reviewdto = new Reviewdto();
+            reviewdto.setComment(review.getComment());
+            reviewdto.setRating(review.getRating());
+            reviewdto.setReviewerName(review.getReviewerName());
+            reviewdtoList.add(reviewdto);
+        }
+        bookResponseDto.setReviews(reviewdtoList);
+
+        return bookResponseDto;
+
+    }
 }
+ 
